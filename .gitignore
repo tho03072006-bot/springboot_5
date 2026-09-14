@@ -27,3 +27,6 @@ Thumbs.db
 
 # ===== Log =====
 *.log
+
+# ===== Mật khẩu thật - KHÔNG bao giờ push lên git =====
+application-secrets.properties
