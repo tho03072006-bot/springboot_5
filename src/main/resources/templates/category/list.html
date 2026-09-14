@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main-layout}">
+<head>
+    <title>Danh sách Category</title>
+</head>
+<body>
+<section layout:fragment="content">
+
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">QUẢN LÝ DỮ LIỆU</p>
+            <h2>Danh mục sản phẩm</h2>
+            <p>Tạo, tìm kiếm và cập nhật các nhóm sản phẩm của bạn.</p>
+        </div>
+        <a th:href="@{/categories/add}" class="btn btn--primary">+ Thêm Category</a>
+    </div>
+
+    <div class="card">
+        <div class="card__header">
+            <h3>Danh sách Category</h3>
+            <span class="count-badge"><span th:text="${categoryPage.totalElements}">0</span> danh mục<span th:if="${keyword != null and !#strings.isEmpty(keyword)}"> phù hợp</span></span>
+        </div>
+
+        <div class="card__body">
+
+            <!--/* Thông báo flash sau khi thêm/sửa/xóa (redirectAttributes.addFlashAttribute) */-->
+            <div th:if="${message != null}" class="alert alert--success" th:text="${message}"></div>
+
+            <!--/* Form tìm kiếm theo tên - dùng GET để có thể chia sẻ/bookmark link kết quả tìm kiếm */-->
+            <form th:action="@{/categories}" method="get" class="search-bar">
+                <div class="search-field">
+                    <label for="keyword">Tìm theo tên danh mục</label>
+                    <input type="search" id="keyword" name="keyword" th:value="${keyword}"
+                           placeholder="Nhập tên danh mục cần tìm..." class="search-bar__input" />
+                </div>
+                <div class="size-field">
+                    <label for="size">Số dòng / trang</label>
+                    <select name="size" id="size" class="form-control">
+                        <option th:if="${size != 5 and size != 10 and size != 20}" th:value="${size}" th:text="${size}" selected></option>
+                        <option th:each="optionSize : ${ {5, 10, 20} }" th:value="${optionSize}" th:text="${optionSize}" th:selected="${size == optionSize}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn--outline">Tìm kiếm</button>
+                <a th:if="${keyword != null and !#strings.isEmpty(keyword)}"
+                   th:href="@{/categories}" class="btn btn--muted">Xóa lọc</a>
+            </form>
+
+            <!--/* Không có kết quả */-->
+            <div th:if="${!categoryPage.hasContent() and (keyword == null or #strings.isEmpty(keyword))}"
+                 class="alert alert--warning">
+                Chưa có danh mục nào. Hãy bấm "+ Thêm Category" để tạo mới.
+            </div>
+            <div th:if="${!categoryPage.hasContent() and keyword != null and !#strings.isEmpty(keyword)}"
+                 class="alert alert--warning">
+                Không tìm thấy danh mục nào phù hợp với từ khóa <strong th:text="${keyword}"></strong>.
+            </div>
+
+            <!--/* Bảng danh sách Category */-->
+            <div th:if="${categoryPage.hasContent()}" class="table-scroll" role="region" aria-label="Danh sách danh mục" tabindex="0">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên danh mục</th>
+                    <th>Mô tả</th>
+                    <th class="table__actions-col">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${categoryPage.content}">
+                    <td><span class="id-badge" th:text="${category.categoryId}"></span></td>
+                    <td class="category-name" th:text="${category.name}"></td>
+                    <td class="category-description" th:text="${#strings.isEmpty(category.description) ? 'Chưa có mô tả' : category.description}"></td>
+                    <td class="table__actions-col">
+                        <a th:href="@{/categories/edit/{id}(id=${category.categoryId})}"
+                           class="btn btn--warning btn--sm">Sửa</a>
+                        <a th:href="@{/categories/delete/{id}(id=${category.categoryId})}"
+                           class="btn btn--danger btn--sm"
+                           onclick="return confirm('Bạn có chắc muốn xóa danh mục này không?');">Xóa</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+
+            <div class="list-bottom" th:if="${categoryPage.hasContent()}">
+            <p class="pagination__summary">
+                Hiển thị <strong th:text="${categoryPage.number * size + 1}"></strong>–<strong th:text="${categoryPage.number * size + categoryPage.numberOfElements}"></strong>
+                / <strong th:text="${categoryPage.totalElements}"></strong> danh mục
+            </p>
+            <!--/* Thanh phân trang - chỉ hiện khi có nhiều hơn 1 trang */-->
+            <nav th:if="${categoryPage.totalPages > 1}" class="pagination" aria-label="Phân trang danh mục">
+
+                <a th:if="${!categoryPage.first}"
+                   th:href="@{/categories(keyword=${keyword}, page=${categoryPage.number - 1}, size=${size})}"
+                   class="pagination__link">&laquo; Trước</a>
+                <span th:if="${categoryPage.first}" class="pagination__link pagination__link--disabled">&laquo; Trước</span>
+
+                <a th:each="pn : ${pageNumbers}"
+                   th:href="@{/categories(keyword=${keyword}, page=${pn}, size=${size})}"
+                   th:text="${pn + 1}"
+                   th:attr="aria-current=${pn == categoryPage.number ? 'page' : null}"
+                   class="pagination__link"
+                   th:classappend="${pn == categoryPage.number} ? 'pagination__link--active'"></a>
+
+                <a th:if="${!categoryPage.last}"
+                   th:href="@{/categories(keyword=${keyword}, page=${categoryPage.number + 1}, size=${size})}"
+                   class="pagination__link">Sau &raquo;</a>
+                <span th:if="${categoryPage.last}" class="pagination__link pagination__link--disabled">Sau &raquo;</span>
+
+            </nav>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>
+</body>
+</html>

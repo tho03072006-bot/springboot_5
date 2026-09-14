@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--/*
+    Fragment header: dùng chung cho mọi trang, chèn vào layout qua
+    th:replace="~{fragments/header :: header}".
+    Ảnh cá nhân được phục vụ từ static/images và dùng chung trên mọi trang.
+*/-->
+<header th:fragment="header" class="app-header">
+    <div class="app-header__brand">
+        <div class="app-header__avatar">
+            <img th:src="@{/images/tran-minh-tho.png}" alt="Ảnh sinh viên Trần Minh Thọ"
+                 width="96" height="112" />
+        </div>
+        <div class="app-header__title">
+            <p class="eyebrow">KHÔNG GIAN QUẢN LÝ</p>
+            <h1>Quản lý Category</h1>
+            <p>Sắp xếp danh mục, quản lý dễ dàng.</p>
+        </div>
+        <a th:href="@{/categories}" class="header-link">Danh mục <span aria-hidden="true">↗</span></a>
+    </div>
+</header>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--/* layout:title-pattern gộp <title> của trang con với <title> của layout này */-->
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Quản lý Category</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+    <!--/* Bố cục 3 phần: header - content - footer, header/footer dùng chung cho mọi trang */-->
+    <div th:replace="~{fragments/header :: header}">Header sẽ được chèn vào đây</div>
+
+    <main class="app-content">
+        <div class="container">
+            <!--/*
+                Đây là "khung rỗng" - nội dung thật (layout:fragment="content")
+                khai báo trong từng trang con (category/list.html, category/form.html)
+                sẽ được Thymeleaf Layout Dialect chèn thay thế vào đây.
+            */-->
+            <div layout:fragment="content">
+                Nội dung trang sẽ được chèn vào đây
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}">Footer sẽ được chèn vào đây</div>
+
+</body>
+</html>

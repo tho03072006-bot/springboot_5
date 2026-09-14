@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!--/*
+    Fragment footer: thông tin sinh viên thực hiện.
+*/-->
+<footer th:fragment="footer" class="app-footer">
+    <p>
+        &copy; <span th:text="${T(java.time.Year).now()}">2026</span>
+        &middot; Sinh viên thực hiện: <strong>Trần Minh Thọ</strong>
+        &middot; MSSV: <strong>24133059</strong>
+    </p>
+    <p>Môn Lập trình Web (WEBPR330479) &middot; GVHD: ThS. Nguyễn Hữu Trung &middot; HCMUTE</p>
+    <p class="footer-stack">Spring Boot &middot; Thymeleaf &middot; Thymeleaf Layout Dialect</p>
+</footer>
+
+</body>
+</html>

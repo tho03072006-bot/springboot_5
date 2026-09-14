@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/main-layout}">
+<head>
+    <title th:text="${category.categoryId == null ? 'Thêm Category' : 'Sửa Category'}">Form Category</title>
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="form-heading">
+        <a th:href="@{/categories}" class="back-link">← Quay lại danh sách</a>
+        <p>Điền thông tin bên dưới để lưu danh mục sản phẩm.</p>
+    </div>
+
+    <div class="card card--form">
+        <div class="card__header">
+            <span th:text="${category.categoryId == null ? 'Thêm danh mục mới' : 'Sửa danh mục'}">Form</span>
+        </div>
+
+        <div class="card__body">
+            <!--/*
+                th:object="${category}" đặt biến đối tượng (th:object) cho toàn bộ form,
+                sau đó các input dùng th:field="*{ten_field}" để tự động 2 chiều:
+                vừa đổ dữ liệu ra (khi sửa), vừa map ngược lại field khi submit.
+            */-->
+            <form th:action="@{/categories/save}" th:object="${category}" method="post" class="form">
+
+                <!--/* Giữ lại categoryId (ẩn) để phân biệt Thêm mới (null) hay Cập nhật (có id) */-->
+                <input type="hidden" th:field="*{categoryId}" />
+
+                <div class="form-group">
+                    <label for="name">Tên danh mục <span class="required">*</span></label>
+                    <input type="text" id="name" th:field="*{name}" class="form-control"
+                           th:errorclass="form-control--error" placeholder="Vd: Đồ uống" maxlength="100" aria-describedby="name-hint" />
+                    <small id="name-hint" class="field-hint">Bắt buộc, tối đa 100 ký tự.</small>
+                    <span class="form-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Mô tả</label>
+                    <textarea id="description" th:field="*{description}" class="form-control"
+                              th:errorclass="form-control--error" rows="4" maxlength="255" aria-describedby="description-hint"
+                              placeholder="Mô tả ngắn cho danh mục (không bắt buộc)"></textarea>
+                    <span class="form-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
+                    <small id="description-hint" class="field-hint">Mô tả ngắn giúp phân biệt danh mục, tối đa 255 ký tự.</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn--primary">Lưu</button>
+                    <a th:href="@{/categories}" class="btn btn--muted">Hủy</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>

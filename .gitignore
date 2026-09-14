@@ -1,0 +1,29 @@
+# ===== Maven build output =====
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# ===== Eclipse / STS =====
+# Lưu ý: KHÔNG ignore .project/.classpath/.settings (giữ theo đúng convention
+# đã dùng ở các project khác của môn - bt2-servlet-jsp, Baitap02 - để clone về
+# import thẳng vào Eclipse là chạy được ngay, không cần tạo lại project).
+.metadata/
+bin/
+.recommenders/
+
+# ===== IDE khác (phòng khi dùng thêm) =====
+.idea/
+*.iml
+*.iws
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Log =====
+*.log
